@@ -880,6 +880,10 @@ DEFINE_PRIM(_DYN, win_get_current_display_setting, _BYTES _BOOL);
 DEFINE_PRIM(_I32, win_change_display_setting, _BYTES _DYN);
 DEFINE_PRIM(_ARR, win_get_monitors, _NO_ARG);
 DEFINE_PRIM(_BYTES, win_get_monitor_from_window, TWIN);
+DEFINE_PRIM(_BOOL, set_cursor_pos, _I32 _I32);
+DEFINE_PRIM(_BOOL, win_set_cursor_pos, TWIN _I32 _I32);
+DEFINE_PRIM(_BOOL, win_set_relative_mouse_mode, TWIN _BOOL);
+DEFINE_PRIM(_BOOL, win_get_relative_mouse_mode, _NO_ARG);
 
 DEFINE_PRIM(_I32, get_screen_width, _NO_ARG);
 DEFINE_PRIM(_I32, get_screen_height, _NO_ARG);

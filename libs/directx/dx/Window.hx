@@ -268,6 +268,10 @@ class Window {
 	static function winGetMonitorFromWindow( win : WinPtr ) : hl.Bytes {
 		return null;
 	}
+	
+	public function clipCursor( enable : Bool ) : Void {
+		winClipCursor(win, enable);
+	}
 
 	static function winCreateEx( x : Int, y : Int, width : Int, height : Int, windowFlags : Int ) : WinPtr {
 		return null;
