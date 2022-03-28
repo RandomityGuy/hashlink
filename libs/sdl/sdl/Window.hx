@@ -8,6 +8,7 @@ typedef DisplayHandle = Null<Int>;
 	var Windowed = 0;
 	var Fullscreen = 1;
 	var Borderless = 2;
+	var FullscreenResize = 3;
 }
 
 typedef DisplaySetting = {
