@@ -21,8 +21,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: darwin
-        architecture: 64
+        target: [darwin]
+        architecture: [64]
         build_system: [make, cmake]
 
         include:
