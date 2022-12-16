@@ -21,16 +21,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [linux, darwin, windows]
-        architecture: [32, 64]
-        build_system: [make, cmake, vs2019]
+        target: darwin
+        architecture: 64
+        build_system: [make, cmake]
 
         include:
-          - target: linux
-            runner: ubuntu-18.04
-            haxe_nightly_dir: linux64
-            archive_ext: tar.gz
-
           - target: darwin
             runner: macos-10.15
             haxe_nightly_dir: mac
@@ -39,40 +34,12 @@ jobs:
           - build_system: cmake
             cmake_configuration: RelWithDebInfo
 
-          - build_system: vs2019
-            msbuild_configuration: Release
-
-          - target: windows
-            runner: windows-2019 # has VS2019 preinstalled which supports PlatformToolset <= v142, WindowsTargetPlatformVersion 10
-            haxe_nightly_dir: windows64
-            archive_ext: zip
-
-          - target: windows
-            build_system: cmake
-            cmake_generator: Visual Studio 16 2019
-
-          - target: windows
-            architecture: 32
-            ffmpeg_url: https://github.com/HaxeFoundation/hashlink/files/5648055/ffmpeg-3.4.2-win32-dev.zip
-            architecture_string: Win32
-
-          - target: windows
-            architecture: 64
-            ffmpeg_url: https://github.com/HaxeFoundation/hashlink/files/5648056/ffmpeg-3.4.2-win64-dev.zip
-            architecture_string: x64
-
         exclude:
-          - target: linux
-            build_system: vs2019
-
           - target: darwin
             build_system: vs2019
 
           - target: darwin
             architecture: 32
-
-          - target: windows
-            build_system: make
 
     steps:
     - name: "SCM Checkout"
@@ -355,8 +322,4 @@ jobs:
         gh release create latest \
           --prerelease \
           --title "HashLink Nightly Build" \
-          "artifact/hashlink-${short_commit}-darwin.tar.gz#hashlink-latest-darwin.tar.gz" \
-          "artifact/hashlink-${short_commit}-linux-i386.tar.gz#hashlink-latest-linux-i386.tar.gz" \
-          "artifact/hashlink-${short_commit}-linux-amd64.tar.gz#hashlink-latest-linux-amd64.tar.gz" \
-          "artifact/hashlink-${short_commit}-win32.zip#hashlink-latest-win32.zip" \
-          "artifact/hashlink-${short_commit}-win64.zip#hashlink-latest-win64.zip"
+          "artifact/hashlink-${short_commit}-darwin.tar.gz#hashlink-latest-darwin.tar.gz"
