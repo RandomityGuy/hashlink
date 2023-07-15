@@ -159,8 +159,7 @@ HL_PRIM bool HL_NAME(event_loop)( event_data *event ) {
 			event->type = MouseMove;
 			event->mouseX = e.motion.x;
 			event->mouseY = e.motion.y;
-			event->mouseXRel = e.motion.xrel;
-			event->mouseYRel = e.motion.yrel;
+			SDL_GetRelativeMouseState(&event->mouseXRel, &event->mouseYRel);
 			break;
 		case SDL_KEYDOWN:
 			event->type = KeyDown;
