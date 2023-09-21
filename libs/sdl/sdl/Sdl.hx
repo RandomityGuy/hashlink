@@ -126,14 +126,16 @@ class Sdl {
 			return [];
 		var i = 0;
 		return [
-			for (d in get_displays()) @:privateAccess {
-				handle:d.handle,
-				name:'${String.fromUTF8(d.name)} (${++i})',
-				left:d.left,
-				top:d.top,
-				right:d.right,
-				bottom:d.bottom
-			}
+			for (d in get_displays())
+				@:privateAccess
+				{
+					handle: d.handle,
+					name: '${String.fromUTF8(d.name)} (${++i})',
+					left: d.left,
+					top: d.top,
+					right: d.right,
+					bottom: d.bottom
+				}
 		];
 	}
 
@@ -243,8 +245,7 @@ class Sdl {
 	}
 }
 
-@:enum
-abstract SDLHint(String) from String to String {
+enum abstract SDLHint(String) from String to String {
 	var SDL_HINT_FRAMEBUFFER_ACCELERATION = "SDL_FRAMEBUFFER_ACCELERATION";
 	var SDL_HINT_RENDER_DRIVER = "SDL_RENDER_DRIVER";
 	var SDL_HINT_RENDER_OPENGL_SHADERS = "SDL_RENDER_OPENGL_SHADERS";
