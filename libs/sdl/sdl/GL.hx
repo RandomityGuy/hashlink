@@ -83,6 +83,8 @@ class GL {
 
 	public static function colorMask(r:Bool, g:Bool, b:Bool, a:Bool) {}
 
+	public static function colorMaski(i:Int, r:Bool, g:Bool, b:Bool, a:Bool) {}
+
 	public static function stencilMaskSeparate(face:Int, mask:Int) {}
 
 	public static function stencilFuncSeparate(face:Int, func:Int, ref:Int, mask:Int) {}
