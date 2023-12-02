@@ -512,12 +512,6 @@ typedef struct {
 	vclosure *wrappedFun;
 } vclosure_wrapper;
 
-struct _hl_carray {
-	hl_type *at;
-	int osize;
-	int size;
-};
-
 struct _hl_field_lookup {
 	hl_type *t;
 	int hashed_name;
