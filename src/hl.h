@@ -201,6 +201,9 @@
 typedef intptr_t int_val;
 typedef long long int64;
 typedef unsigned long long uint64;
+#if defined(_WIN32)
+typedef unsigned long long uint64_t;
+#endif
 
 #include <stdbool.h>
 #include <stdlib.h>
