@@ -1,5 +1,6 @@
 #define HL_NAME(n) openal_##n
 #include <hl.h>
+#undef _GUID
 
 #if defined(CMAKE_BUILD)
 	#include "al.h"
