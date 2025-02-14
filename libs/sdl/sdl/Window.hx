@@ -285,13 +285,13 @@ class Window {
 	}
 
 	public function present() {
-		if (vsync && @:privateAccess Sdl.isWin32) {
-			// NVIDIA OpenGL windows driver does implement vsync as an infinite loop, causing high CPU usage
-			// make sure to sleep a bit here based on how much time we spent since the last frame
-			var spent = haxe.Timer.stamp() - lastFrame;
-			if (spent < 0.005)
-				Sys.sleep(0.005 - spent);
-		}
+		// if (vsync && @:privateAccess Sdl.isWin32) {
+		// 	// NVIDIA OpenGL windows driver does implement vsync as an infinite loop, causing high CPU usage
+		// 	// make sure to sleep a bit here based on how much time we spent since the last frame
+		// 	var spent = haxe.Timer.stamp() - lastFrame;
+		// 	if (spent < 0.005)
+		// 		Sys.sleep(0.005 - spent);
+		// }
 		winSwapWindow(win);
 		lastFrame = haxe.Timer.stamp();
 	}
