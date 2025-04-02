@@ -3896,7 +3896,7 @@ int hl_jit_function( jit_ctx *ctx, hl_module *m, hl_function *f ) {
 						osize = rt->size;
 						if( osize & (HL_WSIZE-1) ) osize += HL_WSIZE - (osize & (HL_WSIZE-1));
 					}
-					preg *idx = alloc_cpu(ctx, rb, true);
+					preg *idx = alloc_cpu64(ctx, rb, true);
 					op64(ctx, IMUL, idx, pconst(&p,osize));
 					op64(ctx, isRead?MOV:LEA, rdst, pmem2(&p,alloc_cpu(ctx,ra, true)->id,idx->id,1,0));
 					store(ctx,dst,dst->current,false);
