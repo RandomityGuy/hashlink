@@ -6,6 +6,8 @@ package sdl;
 	public var mouseY : Int;
 	public var mouseXRel : Int;
 	public var mouseYRel : Int;
+	public var touchX: Float;
+	public var touchY: Float;
 	public var button : Int;
 	public var wheelDelta : Int;
 	public var state : WindowStateChange;
