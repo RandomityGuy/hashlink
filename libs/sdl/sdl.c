@@ -81,6 +81,8 @@ typedef struct {
 	int mouseY;
 	int mouseXRel;
 	int mouseYRel;
+	double touchX;
+	double touchY;
 	int button;
 	int wheelDelta;
 	ws_change state;
@@ -188,20 +190,20 @@ HL_PRIM bool HL_NAME(event_loop)( event_data *event ) {
 			break;
 		case SDL_FINGERDOWN:
 			event->type = TouchDown;
-			event->mouseX = (int)(e.tfinger.x*10000);
-			event->mouseY = (int)(e.tfinger.y*10000);
+			event->touchX = e.tfinger.x;
+			event->touchY = e.tfinger.y;
 			event->fingerId = (int)e.tfinger.fingerId;
 			break;
 		case SDL_FINGERMOTION:
 			event->type = TouchMove;
-			event->mouseX = (int)(e.tfinger.x*10000);
-			event->mouseY = (int)(e.tfinger.y*10000);
+			event->touchX = e.tfinger.x;
+			event->touchY = e.tfinger.y;
 			event->fingerId = (int)e.tfinger.fingerId;
 			break;
 		case SDL_FINGERUP:
 			event->type = TouchUp;
-			event->mouseX = (int)(e.tfinger.x*10000);
-			event->mouseY = (int)(e.tfinger.y*10000);
+			event->touchX = e.tfinger.x;
+			event->touchY = e.tfinger.y;
 			event->fingerId = (int)e.tfinger.fingerId;
 			break;
 		case SDL_MOUSEWHEEL:
