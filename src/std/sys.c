@@ -405,7 +405,13 @@ HL_PRIM bool hl_sys_is_dir( vbyte *path ) {
 }
 
 HL_PRIM bool hl_sys_create_dir( vbyte *path, int mode ) {
+// UWP: Pretty hacky but we have all dirs we need
+// This call fails in final release bundle, even when trying to write areas with permission, only external is fully supported
+#ifndef HL_UWP
 	return mkdir((pchar*)path,mode) == 0;
+#else
+	return true;
+#endif
 }
 
 HL_PRIM bool hl_sys_remove_dir( vbyte *path ) {

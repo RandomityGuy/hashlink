@@ -18,8 +18,9 @@ include(GNUInstallDirs)
 include(FindPkgConfig)
 include(CTest)
 
-# Force /MT instead of /MD for all configs (Debug/Release/etc.)
-if (MSVC)
+option(UWP "Build UWP compatible DLLs" OFF)
+if (UWP)
+    # Force projects to /MT
     foreach (flag_var
             CMAKE_C_FLAGS
             CMAKE_C_FLAGS_DEBUG
@@ -33,6 +34,7 @@ if (MSVC)
             CMAKE_CXX_FLAGS_RELWITHDEBINFO)
         string(REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
     endforeach()
+    add_definitions(-DHL_UWP)
 endif()
 
 # force Unicode over Multi-byte
