@@ -360,8 +360,10 @@ HL_PRIM hl_ssl_cert *HL_NAME(cert_load_defaults)() {
 			mbedtls_x509_crt_parse_der(chain, (unsigned char *)cert->pbCertEncoded, cert->cbCertEncoded);
 		}
 
+#ifdef HL_UWP
 		// Inject cacert.pem needed in UWP sandbox
 		mbedtls_x509_crt_parse_file(chain, "cacert.pem");
+#endif
 
 		CertCloseStore(store, 0);
 	}
