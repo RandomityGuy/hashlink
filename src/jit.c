@@ -2364,6 +2364,7 @@ static void *callback_c2hl( void **f, hl_type *t, void **args, vdynamic *ret ) {
 				*(double*)store = *(double*)v;
 				break;
 			case HI64:
+			case HGUID:
 				*(int64*)store = *(int64*)v;
 				break;
 			default:
@@ -2390,6 +2391,7 @@ static void *callback_c2hl( void **f, hl_type *t, void **args, vdynamic *ret ) {
 				*(double*)store = *(double*)v;
 				break;
 			case HI64:
+			case HGUID:
 				*(int64*)store = *(int64*)v;
 				break;
 			default:
@@ -2408,6 +2410,7 @@ static void *callback_c2hl( void **f, hl_type *t, void **args, vdynamic *ret ) {
 		ret->v.i = ((int (*)(void *, void *, void *))call_jit_c2hl)(*f, (void**)&stack + pos, &stack);
 		return &ret->v.i;
 	case HI64:
+	case HGUID:
 		ret->v.i64 = ((int64 (*)(void *, void *, void *))call_jit_c2hl)(*f, (void**)&stack + pos, &stack);
 		return &ret->v.i64;
 	case HF32:
@@ -2525,6 +2528,7 @@ static void *jit_wrapper_ptr( vclosure_wrapper *c, char *stack_args, void **regs
 	case HBOOL:
 		return (void*)(int_val)hl_dyn_casti(&ret,&hlt_dyn,tret);
 	case HI64:
+	case HGUID:
 		return (void*)(int_val)hl_dyn_casti64(&ret,&hlt_dyn);
 	default:
 		return hl_dyn_castp(&ret,&hlt_dyn,tret);
@@ -2733,6 +2737,7 @@ static void *get_dyncast( hl_type *t ) {
 	case HF64:
 		return hl_dyn_castd;
 	case HI64:
+	case HGUID:
 		return hl_dyn_casti64;
 	case HI32:
 	case HUI16:
@@ -2751,6 +2756,7 @@ static void *get_dynset( hl_type *t ) {
 	case HF64:
 		return hl_dyn_setd;
 	case HI64:
+	case HGUID:
 		return hl_dyn_seti64;
 	case HI32:
 	case HUI16:
@@ -2769,6 +2775,7 @@ static void *get_dynget( hl_type *t ) {
 	case HF64:
 		return hl_dyn_getd;
 	case HI64:
+	case HGUID:
 		return hl_dyn_geti64;
 	case HI32:
 	case HUI16:
@@ -2816,6 +2823,7 @@ static void make_dyn_cast( jit_ctx *ctx, vreg *dst, vreg *v ) {
 		case HI32:
 		case HBOOL:
 		case HI64:
+		case HGUID:
 			tmp = alloc_cpu(ctx, v, true);
 			op64(ctx, TEST, tmp, tmp);
 			XJump_small(JZero, jnull);
@@ -2847,6 +2855,7 @@ static void make_dyn_cast( jit_ctx *ctx, vreg *dst, vreg *v ) {
 	case HF32:
 	case HF64:
 	case HI64:
+	case HGUID:
 		size = begin_native_call(ctx, 2);
 		set_native_arg(ctx, pconst64(&p,(int_val)v->t));
 		break;
@@ -3558,6 +3567,7 @@ int hl_jit_function( jit_ctx *ctx, hl_module *m, hl_function *f ) {
 							set_native_arg_fpu(ctx, fetch(rb), rb->t->kind == HF32);
 							break;
 						case HI64:
+						case HGUID:
 							size = begin_native_call(ctx,3);
 							set_native_arg(ctx, fetch(rb));
 							break;
@@ -3573,6 +3583,7 @@ int hl_jit_function( jit_ctx *ctx, hl_module *m, hl_function *f ) {
 						switch( rb->t->kind ) {
 						case HF64:
 						case HI64:
+						case HGUID:
 							size = pad_before_call(ctx,HL_WSIZE*2 + sizeof(double));
 							push_reg(ctx,rb);
 							break;
@@ -3862,6 +3873,7 @@ int hl_jit_function( jit_ctx *ctx, hl_module *m, hl_function *f ) {
 					op32(ctx,MOVSD,pmem2(&p,base->id,offset->id,1,0),value);
 					break;
 				case HI64:
+				case HGUID:
 					value = alloc_cpu(ctx, rb, true);
 					op64(ctx,MOV,pmem2(&p,base->id,offset->id,1,0),value);
 					break;
@@ -4178,6 +4190,7 @@ int hl_jit_function( jit_ctx *ctx, hl_module *m, hl_function *f ) {
 					call_native(ctx,get_dynset(rb->t),size);
 					break;
 				case HI64:
+				case HGUID:
 					size = begin_native_call(ctx, 3);
 					set_native_arg(ctx,fetch(rb));
 					set_native_arg(ctx,pconst64(&p,hl_hash_gen(hl_get_ustring(m->code,o->p2),true)));
@@ -4204,6 +4217,7 @@ int hl_jit_function( jit_ctx *ctx, hl_module *m, hl_function *f ) {
 					break;
 				case HF64:
 				case HI64:
+				case HGUID:
 					size = pad_before_call(ctx, HL_WSIZE*2 + sizeof(double));
 					push_reg(ctx,rb);
 					op32(ctx,PUSH,pconst64(&p,hl_hash_gen(hl_get_ustring(m->code,o->p2),true)),UNUSED);

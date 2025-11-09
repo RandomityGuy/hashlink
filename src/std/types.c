@@ -235,6 +235,10 @@ HL_PRIM bool hl_safe_cast( hl_type *t, hl_type *to ) {
 		break;
 	case HPACKED:
 		return hl_safe_cast(t->tparam, to);
+	case HGUID:
+		return to->kind == HI64;
+	case HI64:
+		return to->kind == HGUID;
 	default:
 		break;
 	}
@@ -734,6 +738,7 @@ static void compact_write_data( mem_context *ctx, hl_type *t, void *addr ) {
 		break;
 	case HF64:
 	case HI64:
+	case HGUID:
 		compact_write_mem(ctx, addr, 8);
 		break;
 	case HBOOL:
