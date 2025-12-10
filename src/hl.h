@@ -585,7 +585,7 @@ HL_API hl_type hlt_abstract;
 
 HL_API double hl_nan( void );
 HL_API bool hl_is_dynamic( hl_type *t );
-#define hl_is_ptr(t)	((t)->kind >= HBYTES)
+HL_API bool hl_is_ptr( hl_type *t );
 HL_API bool hl_same_type( hl_type *a, hl_type *b );
 HL_API bool hl_safe_cast( hl_type *t, hl_type *to );
 
