@@ -938,7 +938,7 @@ typedef struct {
 
 typedef struct {
 	int count;
-	bool stopping_world;
+	volatile bool stopping_world;
 	hl_thread_info **threads;
 	hl_mutex *global_lock;
 	hl_mutex *exclusive_lock;
