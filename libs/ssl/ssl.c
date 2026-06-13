@@ -15,7 +15,7 @@ typedef int SOCKET;
 #include <stdio.h>
 #include <string.h>
 
-#ifdef HL_MAC
+#if defined(HL_MAC) || defined(HL_IOS)
 #include <Security/Security.h>
 #endif
 
@@ -395,6 +395,22 @@ HL_PRIM hl_ssl_cert *HL_NAME(cert_load_defaults)() {
 		}
 	}
 	CFRelease(keychain);
+#elif defined(HL_IOS)
+	CFBundleRef bundle = CFBundleGetMainBundle();
+	CFURLRef url = CFBundleCopyResourceURL(bundle, CFSTR("cacert"), CFSTR("pem"), NULL);
+	if (url != NULL) {
+		char path[1024];
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8*)path, sizeof(path))) {
+			chain = (mbedtls_x509_crt*)malloc(sizeof(mbedtls_x509_crt));
+			mbedtls_x509_crt_init(chain);
+			if (mbedtls_x509_crt_parse_file(chain, path) != 0) {
+				mbedtls_x509_crt_free(chain);
+				free(chain);
+				chain = NULL;
+			}
+		}
+		CFRelease(url);
+	}
 #elif defined(HL_CONSOLE)
 	chain = hl_init_cert_chain();
 #endif

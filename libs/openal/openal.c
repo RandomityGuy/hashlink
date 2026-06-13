@@ -17,10 +17,15 @@
 // ----------------------------------------------------------------------------
 // ALC
 // ----------------------------------------------------------------------------
-
+#if defined(HL_IOS) || defined(HL_TVOS)
+#define ALC_IMPORT(fun, t) static t fun
+#include "ALCImports.h"
+#undef ALC_IMPORT
+#else
 #define ALC_IMPORT(fun, t) t fun
 #include "ALCImports.h"
 #undef ALC_IMPORT
+#endif
 
 // Context management
 
@@ -147,10 +152,15 @@ DEFINE_PRIM(_VOID,    alc_capture_samples,      TDEVICE _BYTES _I32);
 // ----------------------------------------------------------------------------
 // AL
 // ----------------------------------------------------------------------------
-
+#if defined(HL_IOS) || defined(HL_TVOS)
+#define AL_IMPORT(fun, t) static t fun
+#include "ALImports.h"
+#undef AL_IMPORT
+#else
 #define AL_IMPORT(fun, t) t fun
 #include "ALImports.h"
 #undef AL_IMPORT
+#endif
 
 HL_PRIM void HL_NAME(al_doppler_factor)(float value) {
 	alDopplerFactor(value);

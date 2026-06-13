@@ -163,7 +163,11 @@ HL_PRIM void HL_NAME(gl_color_mask)( bool r, bool g, bool b, bool a ) {
 }
 
 HL_PRIM void HL_NAME(gl_color_maski)( int i, bool r, bool g, bool b, bool a ) {
+#ifdef HL_GLES
+	glColorMask(r, g, b, a); // glColorMaski unavailable on OpenGL ES
+#else
 	glColorMaski(i, r, g, b, a);
+#endif
 }
 
 HL_PRIM void HL_NAME(gl_stencil_mask_separate)(int face, int mask) {

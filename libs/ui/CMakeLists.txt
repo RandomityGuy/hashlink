@@ -1,4 +1,8 @@
-add_library(ui.hdll SHARED ui_stub.c)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    add_library(ui.hdll STATIC ui_stub.c)
+else()
+    add_library(ui.hdll SHARED ui_stub.c)
+endif()
 
 if(WIN32)
     set_target_properties(ui.hdll PROPERTIES SOURCES ui_win.c)

@@ -1,6 +1,8 @@
-add_library(uv.hdll SHARED
-    uv.c
-)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    add_library(uv.hdll STATIC uv.c)
+else()
+    add_library(uv.hdll SHARED uv.c)
+endif()
 
 if(WIN32)
     target_sources(uv.hdll
@@ -62,11 +64,10 @@ if(WIN32)
     )
 else()
     target_include_directories(uv.hdll
-        PRIVATE
-        ${LibUV_INCLUDE_DIRS}
+        PRIVATE ${UV_INCLUDE_DIR}
     )
     target_link_libraries(uv.hdll
-        ${LibUV_LIBRARIES}
+        ${UV_LIBRARY}
     )
 endif()
 

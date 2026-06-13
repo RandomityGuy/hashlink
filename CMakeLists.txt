@@ -128,11 +128,19 @@ if(IOS_PLATFORM)
     )
 endif()
 
-add_library(libhl SHARED
-    ${pcre_srcs}
-    src/gc.c
-    ${std_srcs}
-)
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    add_library(libhl STATIC
+        ${pcre_srcs}
+        src/gc.c
+        ${std_srcs}
+    )
+else()
+    add_library(libhl SHARED
+        ${pcre_srcs}
+        src/gc.c
+        ${std_srcs}
+    )
+endif()
 
 set(public_headers
     src/hl.h
@@ -156,10 +164,15 @@ else()
     )
 endif()
 
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    set_target_properties(libhl
+        PROPERTIES
+        VERSION ${HL_VERSION}
+        SOVERSION ${HL_VERSION_MAJOR}
+    )
+endif()
 set_target_properties(libhl
     PROPERTIES
-    VERSION ${HL_VERSION}
-    SOVERSION ${HL_VERSION_MAJOR}
     COMPILE_DEFINITIONS "_USRDLL;LIBHL_EXPORTS;HAVE_CONFIG_H;PCRE2_CODE_UNIT_WIDTH=16"
 )
 
@@ -354,6 +367,7 @@ install(
         hl
         libhl
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    BUNDLE DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}

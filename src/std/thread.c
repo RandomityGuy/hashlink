@@ -970,8 +970,8 @@ HL_PRIM void hl_thread_set_name( hl_thread *t, const char *name ) {
 	// nothing
 #elif defined(HL_WIN)
 	SetThreadName((DWORD)(int_val)t,name);
-#elif defined(HL_MAC)
-	// pthread_setname_np only possible for current thread
+#elif defined(HL_MAC) || defined(__APPLE__)
+	// pthread_setname_np only possible for current thread on Apple platforms
 #else
 	pthread_setname_np((pthread_t)t,name);
 #endif

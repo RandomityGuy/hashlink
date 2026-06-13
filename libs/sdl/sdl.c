@@ -410,6 +410,20 @@ HL_PRIM void HL_NAME(text_input)( bool enable ) {
 		SDL_StopTextInput();
 }
 
+#if defined(HL_IOS)
+
+SDL_Rect textInputRect;
+
+HL_PRIM void HL_NAME(text_input_rect)(int x, int y, int w, int h) {
+	textInputRect.x = x;
+	textInputRect.y = y;
+	textInputRect.w = w;
+	textInputRect.h = h;
+	SDL_SetTextInputRect(&textInputRect);
+}
+
+#endif
+
 HL_PRIM int HL_NAME(set_relative_mouse_mode)(bool enable) {
 	return SDL_SetRelativeMouseMode(enable);
 }

@@ -126,21 +126,28 @@ else()
 
     find_package(TurboJPEG QUIET)
     if(NOT TurboJPEG_FOUND)
-        pkg_check_modules(TurboJPEG REQUIRED libjpeg)
+        if(TurboJPEG_LIBRARIES AND TurboJPEG_INCLUDE_DIRS)
+            set(TurboJPEG_FOUND TRUE)
+        else()
+            pkg_check_modules(TurboJPEG REQUIRED libjpeg)
+        endif()
     endif()
 
     find_package(OggVorbis QUIET)
     if(NOT OGGVORBIS_FOUND)
-        pkg_check_modules(OGGVORBIS REQUIRED vorbis vorbisenc vorbisfile)
+        if(VORBIS_LIBRARY AND VORBISFILE_LIBRARY AND VORBISENC_LIBRARY)
+            set(OGGVORBIS_LIBRARIES ${VORBISFILE_LIBRARY} ${VORBIS_LIBRARY} ${OGG_LIBRARY})
+            set(OGGVORBIS_FOUND TRUE)
+        else()
+            pkg_check_modules(OGGVORBIS REQUIRED vorbis vorbisenc vorbisfile)
+        endif()
     endif()
 
-    add_library(fmt.hdll SHARED
-        fmt.c
-        sha1.c
-        dxt.c
-        mikkt.c
-        ${MIKKTSPACE_INCLUDE_DIR}/mikktspace.c
-    )
+    if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+        add_library(fmt.hdll STATIC fmt.c sha1.c dxt.c mikkt.c ${MIKKTSPACE_INCLUDE_DIR}/mikktspace.c)
+    else()
+        add_library(fmt.hdll SHARED fmt.c sha1.c dxt.c mikkt.c ${MIKKTSPACE_INCLUDE_DIR}/mikktspace.c)
+    endif()
 endif()
 
 set_as_hdll(fmt)
@@ -151,6 +158,7 @@ target_include_directories(fmt.hdll
     ${PNG_INCLUDE_DIRS}
     ${TurboJPEG_INCLUDE_DIRS}
     ${VORBIS_INCLUDE_DIR}
+    ${OGG_INCLUDE_DIR}
     ${MINIMP3_INCLUDE_DIR}
     ${MIKKTSPACE_INCLUDE_DIR}
 )

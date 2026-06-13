@@ -1,12 +1,21 @@
 set(INCLUDES_BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 function(set_as_hdll target)
+    if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+        set_target_properties(${target}.hdll
+            PROPERTIES
+            PREFIX ""
+            OUTPUT_NAME ${target}
+            SUFFIX .hdll.a
+        )
+    else()
     set_target_properties(${target}.hdll
         PROPERTIES
         PREFIX ""
         OUTPUT_NAME ${target}
         SUFFIX .hdll
     )
+    endif()
 endfunction()
 
 if(WIN32)

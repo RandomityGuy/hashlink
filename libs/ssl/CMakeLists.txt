@@ -1,4 +1,9 @@
-add_library(ssl.hdll SHARED
+if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+set(SSL_HDLL_TYPE STATIC)
+else()
+set(SSL_HDLL_TYPE SHARED)
+endif()
+add_library(ssl.hdll ${SSL_HDLL_TYPE}
     ${INCLUDES_BASE_DIR}/mbedtls/library/aes.c
     ${INCLUDES_BASE_DIR}/mbedtls/library/aesni.c
     ${INCLUDES_BASE_DIR}/mbedtls/library/arc4.c
@@ -81,10 +86,13 @@ if(WIN32)
     set(SSLLINKLIBS crypt32)
 endif()
 if(APPLE)
-    set(SSLLINKLIBS 
+    set(SSLLINKLIBS
     "-framework CoreFoundation"
     "-framework Security"
     )
+    if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+        target_compile_definitions(ssl.hdll PRIVATE HL_IOS)
+    endif()
 endif()
 
 target_link_libraries(ssl.hdll
