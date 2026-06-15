@@ -63,12 +63,22 @@ if(WIN32)
         BUILDING_UV_SHARED
     )
 else()
-    target_include_directories(uv.hdll
-        PRIVATE ${UV_INCLUDE_DIR}
-    )
-    target_link_libraries(uv.hdll
-        ${UV_LIBRARY}
-    )
+    if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+        target_include_directories(uv.hdll
+            PRIVATE ${UV_INCLUDE_DIR}
+        )
+        target_link_libraries(uv.hdll
+            ${UV_LIBRARY}
+        )
+    else()
+        target_include_directories(uv.hdll
+            PRIVATE
+            ${LibUV_INCLUDE_DIRS}
+        )
+        target_link_libraries(uv.hdll
+            ${LibUV_LIBRARIES}
+        )
+    endif()
 endif()
 
 install(
