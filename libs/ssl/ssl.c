@@ -115,7 +115,9 @@ HL_PRIM void HL_NAME(ssl_close)(mbedtls_ssl_context *ssl) {
 
 HL_PRIM int HL_NAME(ssl_handshake)(mbedtls_ssl_context *ssl) {
 	int r;
+	hl_blocking(true);
 	r = mbedtls_ssl_handshake(ssl);
+	hl_blocking(false);
 	if( is_ssl_blocking(r) )
 		return -1;
 	if( r == MBEDTLS_ERR_SSL_CONN_EOF )
@@ -138,7 +140,9 @@ static bool is_block_error() {
 }
 
 static int net_read(void *fd, unsigned char *buf, size_t len) {
+	hl_blocking(true);
 	int r = recv((SOCKET)(int_val)fd, (char *)buf, (int)len, MSG_NOSIGNAL);
+	hl_blocking(false);
 	if( r == SOCKET_ERROR && is_block_error() )
 		return MBEDTLS_ERR_SSL_WANT_READ;
 	return r;
@@ -195,29 +199,40 @@ HL_PRIM int HL_NAME(ssl_send_char)(mbedtls_ssl_context *ssl, int c) {
 	unsigned char cc;
 	int r;
 	cc = (unsigned char)c;
+	hl_blocking(true);
 	r = mbedtls_ssl_write(ssl, &cc, 1);
+	hl_blocking(false);
 	if( r < 0 )
 		return ssl_block_error(r);
 	return 1;
 }
 
 HL_PRIM int HL_NAME(ssl_send)(mbedtls_ssl_context *ssl, vbyte *buf, int pos, int len) {
-	int r = mbedtls_ssl_write(ssl, (const unsigned char *)buf + pos, len);
-	if( r < 0 ) 
+	int r;
+	hl_blocking(true);
+	r = mbedtls_ssl_write(ssl, (const unsigned char *)buf + pos, len);
+	hl_blocking(false);
+	if( r < 0 )
 		return ssl_block_error(r);
 	return r;
 }
 
 HL_PRIM int HL_NAME(ssl_recv_char)(mbedtls_ssl_context *ssl) {
 	unsigned char c;
-	int ret = mbedtls_ssl_read(ssl, &c, 1);
+	int ret;
+	hl_blocking(true);
+	ret = mbedtls_ssl_read(ssl, &c, 1);
+	hl_blocking(false);
 	if( ret != 1 )
 		return ssl_block_error(ret);
 	return c;
 }
 
 HL_PRIM int HL_NAME(ssl_recv)(mbedtls_ssl_context *ssl, vbyte *buf, int pos, int len) {
-	int ret = mbedtls_ssl_read(ssl, (unsigned char*)buf+pos, len);
+	int ret;
+	hl_blocking(true);
+	ret = mbedtls_ssl_read(ssl, (unsigned char*)buf+pos, len);
+	hl_blocking(false);
 	if( ret == MBEDTLS_ERR_SSL_PEER_CLOSE_NOTIFY )
 		return 0;
 	if( ret < 0 )
